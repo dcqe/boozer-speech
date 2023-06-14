@@ -11,6 +11,7 @@ from scipy import signal
 
 logging.basicConfig(level=20)
 
+
 class Audio(object):
     """Streams raw audio from microphone. Data is received in a separate thread, and stored in a buffer, to be read from."""
 
@@ -22,11 +23,12 @@ class Audio(object):
 
     def __init__(self, callback=None, device=None, input_rate=RATE_PROCESS, file=None):
         def proxy_callback(in_data, frame_count, time_info, status):
-            #pylint: disable=unused-argument
+            # pylint: disable=unused-argument
             if self.chunk is not None:
                 in_data = self.wf.readframes(self.chunk)
             callback(in_data)
             return (None, pyaudio.paContinue)
+
         if callback is None: callback = lambda in_data: self.buffer_queue.put(in_data)
         self.buffer_queue = queue.Queue()
         self.device = device
@@ -151,6 +153,7 @@ class VADAudio(Audio):
                     yield None
                     ring_buffer.clear()
 
+
 def main(ARGS):
     # Load DeepSpeech model
     if os.path.isdir(ARGS.model):
@@ -189,16 +192,19 @@ def main(ARGS):
             if spinner: spinner.stop()
             logging.debug("end utterence")
             if ARGS.savewav:
-                vad_audio.write_wav(os.path.join(ARGS.savewav, datetime.now().strftime("savewav_%Y-%m-%d_%H-%M-%S_%f.wav")), wav_data)
+                vad_audio.write_wav(
+                    os.path.join(ARGS.savewav, datetime.now().strftime("savewav_%Y-%m-%d_%H-%M-%S_%f.wav")), wav_data)
                 wav_data = bytearray()
             text = stream_context.finishStreamWithMetadata()
             print("Recognized: %s" % text)
             stream_context = model.createStream()
 
+
 if __name__ == '__main__':
     DEFAULT_SAMPLE_RATE = 16000
 
     import argparse
+
     parser = argparse.ArgumentParser(description="Stream from microphone to DeepSpeech using VAD")
 
     parser.add_argument('-v', '--vad_aggressiveness', type=int, default=3,
