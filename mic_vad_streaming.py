@@ -217,9 +217,9 @@ if __name__ == '__main__':
                         help="Read from .wav file instead of microphone")
 
     parser.add_argument('-m', '--model', required=True,
-                        help="Path to the model (protocol buffer binary file, or entire directory containing all standard-named files for model)")
+                        help="Path to the model (protocol buffer binary file, or entire directory containing all standard-named files for model)", default="deepspeech-0.9.3-models.pbmm")
     parser.add_argument('-s', '--scorer',
-                        help="Path to the external scorer file.")
+                        help="Path to the external scorer file.", default="deepspeech-0.9.3-models.scorer")
     parser.add_argument('-d', '--device', type=int, default=None,
                         help="Device input index (Int) as listed by pyaudio.PyAudio.get_device_info_by_index(). If not provided, falls back to PyAudio.get_default_device().")
     parser.add_argument('-r', '--rate', type=int, default=DEFAULT_SAMPLE_RATE,
