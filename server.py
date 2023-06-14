@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    output = subprocess.check_output(['python', 'script.py'])
+    output = subprocess.check_output(['python', 'mic_vad_streaming.py'])
     return render_template('index.html', output=output)
 
 
